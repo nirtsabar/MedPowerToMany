@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>בחירת טופס</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ece4;
+    --card-bg: #ffffff;
+    --card-hover: #faf8f5;
+    --primary: #2c5f4a;
+    --primary-light: #3a7d62;
+    --accent: #c4956a;
+    --accent-light: #ddb68e;
+    --text: #2a2a2a;
+    --text-muted: #6b6b6b;
+    --text-light: #999;
+    --border: #e0dbd3;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+    --radius: 14px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Subtle texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='%23c4956a' stroke-width='0.3' opacity='0.12'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; }
+
+  /* ─── Header ─── */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e4435 100%);
+    color: #fff;
+    padding: 36px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+  }
+
+  header h1 {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  header p {
+    font-weight: 300;
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  /* Decorative icon in header */
+  .header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(4px);
+  }
+
+  .header-icon svg {
+    width: 28px; height: 28px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ─── Search ─── */
+  .search-wrap {
+    max-width: 480px;
+    margin: -22px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .search-box {
+    width: 100%;
+    padding: 14px 44px 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card-bg);
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+    direction: rtl;
+  }
+
+  .search-box::placeholder { color: var(--text-light); }
+  .search-box:focus {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover), 0 0 0 3px rgba(44,95,74,0.08);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 34px; top: 50%;
+    transform: translateY(-50%);
+    width: 18px; height: 18px;
+    stroke: var(--text-light);
+    fill: none;
+    stroke-width: 2;
+    pointer-events: none;
+  }
+
+  /* ─── Grid ─── */
+  .grid-container {
+    max-width: 900px;
+    margin: 28px auto 40px;
+    padding: 0 20px;
+  }
+
+  .category-label {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+    padding-right: 4px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+  }
+
+  /* ─── Card ─── */
+  .card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition),
+                border-color var(--transition), background var(--transition);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.4s ease both;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+    background: var(--card-hover);
+  }
+
+  .card:active { transform: translateY(-1px); }
+
+  .card.hidden { display: none; }
+
+  /* stagger animation */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1)  { animation-delay: 0.03s; }
+  .card:nth-child(2)  { animation-delay: 0.06s; }
+  .card:nth-child(3)  { animation-delay: 0.09s; }
+  .card:nth-child(4)  { animation-delay: 0.12s; }
+  .card:nth-child(5)  { animation-delay: 0.15s; }
+  .card:nth-child(6)  { animation-delay: 0.18s; }
+  .card:nth-child(7)  { animation-delay: 0.21s; }
+  .card:nth-child(8)  { animation-delay: 0.24s; }
+  .card:nth-child(9)  { animation-delay: 0.27s; }
+  .card:nth-child(10) { animation-delay: 0.30s; }
+  .card:nth-child(11) { animation-delay: 0.33s; }
+  .card:nth-child(12) { animation-delay: 0.36s; }
+  .card:nth-child(13) { animation-delay: 0.39s; }
+  .card:nth-child(14) { animation-delay: 0.42s; }
+  .card:nth-child(15) { animation-delay: 0.45s; }
+  .card:nth-child(16) { animation-delay: 0.48s; }
+  .card:nth-child(17) { animation-delay: 0.51s; }
+  .card:nth-child(18) { animation-delay: 0.54s; }
+  .card:nth-child(19) { animation-delay: 0.57s; }
+  .card:nth-child(20) { animation-delay: 0.60s; }
+
+  /* Card number badge */
+  .card-num {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    transition: background var(--transition);
+  }
+
+  .card:hover .card-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-arrow {
+    position: absolute;
+    left: 16px; top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    width: 16px; height: 16px;
+    stroke: var(--text-light);
+    fill: none;
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity var(--transition), left var(--transition);
+  }
+
+  .card:hover .card-arrow {
+    opacity: 1;
+    left: 14px;
+    stroke: var(--primary);
+  }
+
+  /* ─── Empty state ─── */
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-muted);
+    display: none;
+  }
+
+  .empty-state.visible { display: block; }
+
+  .empty-state svg {
+    width: 48px; height: 48px;
+    stroke: var(--border);
+    fill: none;
+    stroke-width: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.78rem;
+    color: var(--text-light);
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 480px) {
+    header { padding: 28px 16px 24px; }
+    .grid { grid-template-columns: 1fr; gap: 10px; }
+    .card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    </div>
+    <h1>בחירת טופס</h1>
+    <p>בחרו את הטופס הרצוי מהרשימה</p>
+  </header>
+
+  <div class="search-wrap">
+    <input type="text" class="search-box" id="searchInput" placeholder="חיפוש טופס..." autocomplete="off">
+    <svg class="search-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </div>
+
+  <div class="grid-container">
+    <div class="category-label" id="categoryLabel">טפסים זמינים</div>
+    <div class="grid" id="formGrid"></div>
+    <div class="empty-state" id="emptyState">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="8" y1="11" x2="14" y2="11"/>
+      </svg>
+      <p>לא נמצאו טפסים תואמים</p>
+    </div>
+  </div>
+
+  <footer>בחירת טפסים &bull; גרסה 1.0</footer>
+
+</div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  CONFIGURE YOUR FORMS HERE — up to 20 entries                  ║
+// ║  Each entry: { title, desc (optional), url }                   ║
+// ╚══════════════════════════════════════════════════════════════════╝
+const FORMS = [
+  {
+    title: "ייפוי כוח ליחיד -  8 עמ'",
+    desc: "טופס יפוי כח רפואי למיופה כח יחיד - גרסת אתר משרד המשפטים (האפוטרופוס הכללי) 8 עמודים",
+    url: "https://example.com/form1"
+  },
+  {
+    title: "טופס דוגמה שני",
+    desc: "תיאור קצר של הטופס השני",
+    url: "https://example.com/form2"
+  },
+  {
+    title: "טופס דוגמה שלישי",
+    desc: "",
+    url: "https://example.com/form3"
+  },
+  // {
+  //   title: "טופס 4",
+  //   desc: "תיאור",
+  //   url: "https://example.com/form4"
+  // },
+  // ... add up to 20 forms
+];
+
+// ─── Render ───
+const grid = document.getElementById('formGrid');
+const emptyState = document.getElementById('emptyState');
+const searchInput = document.getElementById('searchInput');
+const categoryLabel = document.getElementById('categoryLabel');
+
+function renderCards(forms) {
+  grid.innerHTML = '';
+  forms.forEach((form, i) => {
+    const card = document.createElement('a');
+    card.className = 'card';
+    card.href = form.url;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+    card.dataset.title = form.title;
+    card.dataset.desc = form.desc || '';
+
+    card.innerHTML = `
+      <div class="card-num">${i + 1}</div>
+      <div class="card-body">
+        <div class="card-title">${esc(form.title)}</div>
+        ${form.desc ? `<div class="card-desc">${esc(form.desc)}</div>` : ''}
+      </div>
+      <svg class="card-arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+renderCards(FORMS);
+
+// ─── Search / Filter ───
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const cards = grid.querySelectorAll('.card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const title = (card.dataset.title || '').toLowerCase();
+    const desc = (card.dataset.desc || '').toLowerCase();
+    const match = !q || title.includes(q) || desc.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+
+  emptyState.classList.toggle('visible', visible === 0);
+  categoryLabel.textContent = q
+    ? `תוצאות חיפוש (${visible})`
+    : 'טפסים זמינים';
+});
+</script>
+</body>
+</html>
