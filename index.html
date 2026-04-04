@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>בחירת טופס</title>
+<title>טפסים</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c5f4a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -35,7 +36,6 @@
     padding: 0;
   }
 
-  /* Subtle texture */
   body::before {
     content: '';
     position: fixed;
@@ -47,7 +47,6 @@
 
   .page { position: relative; z-index: 1; }
 
-  /* ─── Header ─── */
   header {
     background: linear-gradient(135deg, var(--primary) 0%, #1e4435 100%);
     color: #fff;
@@ -79,7 +78,6 @@
     opacity: 0.8;
   }
 
-  /* Decorative icon in header */
   .header-icon {
     display: inline-flex;
     align-items: center;
@@ -100,7 +98,6 @@
     stroke-linejoin: round;
   }
 
-  /* ─── Search ─── */
   .search-wrap {
     max-width: 480px;
     margin: -22px auto 0;
@@ -141,12 +138,13 @@
     pointer-events: none;
   }
 
-  /* ─── Grid ─── */
   .grid-container {
     max-width: 700px;
     margin: 28px auto 40px;
     padding: 0 20px;
   }
+
+  .category-section { margin-bottom: 28px; }
 
   .category-label {
     font-family: 'Rubik', sans-serif;
@@ -165,7 +163,6 @@
     gap: 14px;
   }
 
-  /* ─── Card ─── */
   .card {
     background: var(--card-bg);
     border: 1.5px solid var(--border);
@@ -192,10 +189,8 @@
   }
 
   .card:active { transform: translateY(-1px); }
-
   .card.hidden { display: none; }
 
-  /* stagger animation */
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -211,18 +206,7 @@
   .card:nth-child(8)  { animation-delay: 0.24s; }
   .card:nth-child(9)  { animation-delay: 0.27s; }
   .card:nth-child(10) { animation-delay: 0.30s; }
-  .card:nth-child(11) { animation-delay: 0.33s; }
-  .card:nth-child(12) { animation-delay: 0.36s; }
-  .card:nth-child(13) { animation-delay: 0.39s; }
-  .card:nth-child(14) { animation-delay: 0.42s; }
-  .card:nth-child(15) { animation-delay: 0.45s; }
-  .card:nth-child(16) { animation-delay: 0.48s; }
-  .card:nth-child(17) { animation-delay: 0.51s; }
-  .card:nth-child(18) { animation-delay: 0.54s; }
-  .card:nth-child(19) { animation-delay: 0.57s; }
-  .card:nth-child(20) { animation-delay: 0.60s; }
 
-  /* Card number badge */
   .card-num {
     flex-shrink: 0;
     width: 38px; height: 38px;
@@ -239,6 +223,14 @@
   }
 
   .card:hover .card-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  }
+
+  /* "Other" section cards get a subtler badge */
+  .section-other .card-num {
+    background: linear-gradient(135deg, #8a8a8a, #aaa);
+  }
+  .section-other .card:hover .card-num {
     background: linear-gradient(135deg, var(--accent), var(--accent-light));
   }
 
@@ -281,7 +273,6 @@
     stroke: var(--primary);
   }
 
-  /* ─── Empty state ─── */
   .empty-state {
     text-align: center;
     padding: 48px 20px;
@@ -299,11 +290,15 @@
     margin-bottom: 12px;
   }
 
-  .empty-state p {
-    font-size: 0.95rem;
+  .empty-state p { font-size: 0.95rem; }
+
+  /* Section divider */
+  .section-divider {
+    border: none;
+    border-top: 1.5px dashed var(--border);
+    margin: 8px 0 0;
   }
 
-  /* ─── Footer ─── */
   footer {
     text-align: center;
     padding: 20px;
@@ -311,7 +306,6 @@
     color: var(--text-light);
   }
 
-  /* ─── Responsive ─── */
   @media (max-width: 480px) {
     header { padding: 28px 16px 24px; }
     .grid { grid-template-columns: 1fr; gap: 10px; }
@@ -332,7 +326,7 @@
         <polyline points="10 9 9 9 8 9"/>
       </svg>
     </div>
-    <h1>בחירת טופס</h1>
+    <h1>בחירת טופס ייפוי כוח רפואי</h1>
     <p>בחרו את הטופס הרצוי מהרשימה</p>
   </header>
 
@@ -344,8 +338,22 @@
   </div>
 
   <div class="grid-container">
-    <div class="category-label" id="categoryLabel">טפסים זמינים</div>
-    <div class="grid" id="formGrid"></div>
+
+    <!-- ── Section: Recommended ── -->
+    <div class="category-section section-recommended" id="sectionRecommended">
+      <div class="category-label" id="labelRecommended">טפסים מומלצים</div>
+      <div class="grid" id="gridRecommended"></div>
+    </div>
+
+    <hr class="section-divider" id="divider">
+
+    <!-- ── Section: Other ── -->
+    <div class="category-section section-other" id="sectionOther">
+      <br>
+      <div class="category-label" id="labelOther">טפסים אחרים</div>
+      <div class="grid" id="gridOther"></div>
+    </div>
+
     <div class="empty-state" id="emptyState">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -353,6 +361,7 @@
       </svg>
       <p>לא נמצאו טפסים תואמים</p>
     </div>
+
   </div>
 
   <footer>בחירת טפסים &bull; גרסה 1.0</footer>
@@ -361,46 +370,61 @@
 
 <script>
 // ╔══════════════════════════════════════════════════════════════════╗
-// ║  CONFIGURE YOUR FORMS HERE — up to 20 entries                  ║
+// ║  CONFIGURE YOUR FORMS HERE — up to 20 entries total            ║
 // ║  Each entry: { title, desc (optional), url }                   ║
 // ╚══════════════════════════════════════════════════════════════════╝
-const FORMS = [
+
+const FORMS_RECOMMENDED = [
   {
     title: "ייפוי כוח ליחיד -  7 עמ'",
     desc: "טופס יפוי כח רפואי למיופה כח יחיד - גרסה מקוצרת (שרותי בריאות כללית) 7 עמודים",
     url: "PtOne7"
   },
   {
-    title: "ייפוי כוח לרבים - 10 עמ",
+    title: "ייפוי כוח לרבים - 10 עמ'",
     desc: "טופס יפוי כח רפואי למספר מיופי כח - גרסה מקוצרת (שרותי בריאות כללית) 10 עמודים",
     url: "PtM10"
   },
   {
-    title: "ייפוי כוח ליחיד -  6 עמ'",
-    desc: "טופס יפוי כח רפואי למיופה כח יחיד - גרסת כללית (https://www.gov.il/BlobFolder/generalpage/05_01_2020/he/dalet%20clalit.pdf) 6 עמודים",
-    url: "PtOne6p"
-  },
-  {
-    title: "ייפוי כוח לרבים - 13 עמ",
-    desc: "טופס יפוי כח רפואי למספר מיופי כח - גרסת אתר משרד המשפטים (האפוטרופוס הכללי) 13 עמודים",
-    url: "https://nirtsabar.github.io/MedicalPower/"
+    title: "מחוק זכויות החולה הנוטה למות",
+    desc: "ייפוי כוח רפואי לפי חוק זכויות החולה הנוטה למות",
+    url: "P2DP"
   },
   {
     title: "אתר משרד המשפטים GOV",
     desc: "סיוע, ייצוג והליכים משפטיים > ייפוי כוח רפואי. כל הטפסים, הסברים וקישור להפקדה",
     url: "https://www.gov.il/he/service/medical_continuous_power_of_attorney"
   },
-  // ... add up to 20 forms
+  // ... add more recommended forms
+];
+
+const FORMS_OTHER = [
+  {
+    title: "ייפוי כוח ליחיד -  6 עמ'",
+    desc: "טופס יפוי כח רפואי למיופה כח יחיד - גרסת כללית (https://www.gov.il/BlobFolder/generalpage/05_01_2020/he/dalet%20clalit.pdf) 6 עמודים",
+    url: "PtOne6p"
+  },
+  {
+    title: "ייפוי כוח לרבים - 13 עמ'",
+    desc: "טופס יפוי כח רפואי למספר מיופי כח - גרסת אתר משרד המשפטים (האפוטרופוס הכללי) 13 עמודים",
+    url: "https://nirtsabar.github.io/MedicalPower/"
+  },
+  // ... add more other forms
 ];
 
 // ─── Render ───
-const grid = document.getElementById('formGrid');
-const emptyState = document.getElementById('emptyState');
-const searchInput = document.getElementById('searchInput');
-const categoryLabel = document.getElementById('categoryLabel');
+const gridRec       = document.getElementById('gridRecommended');
+const gridOther     = document.getElementById('gridOther');
+const sectionRec    = document.getElementById('sectionRecommended');
+const sectionOther  = document.getElementById('sectionOther');
+const labelRec      = document.getElementById('labelRecommended');
+const labelOther    = document.getElementById('labelOther');
+const emptyState    = document.getElementById('emptyState');
+const divider       = document.getElementById('divider');
+const searchInput   = document.getElementById('searchInput');
 
-function renderCards(forms) {
-  grid.innerHTML = '';
+function renderCards(forms, container, startNum) {
+  container.innerHTML = '';
   forms.forEach((form, i) => {
     const card = document.createElement('a');
     card.className = 'card';
@@ -411,7 +435,7 @@ function renderCards(forms) {
     card.dataset.desc = form.desc || '';
 
     card.innerHTML = `
-      <div class="card-num">${i + 1}</div>
+      <div class="card-num">${startNum + i}</div>
       <div class="card-body">
         <div class="card-title">${esc(form.title)}</div>
         ${form.desc ? `<div class="card-desc">${esc(form.desc)}</div>` : ''}
@@ -422,7 +446,7 @@ function renderCards(forms) {
       </svg>
     `;
 
-    grid.appendChild(card);
+    container.appendChild(card);
   });
 }
 
@@ -432,26 +456,44 @@ function esc(str) {
   return d.innerHTML;
 }
 
-renderCards(FORMS);
+renderCards(FORMS_RECOMMENDED, gridRec, 1);
+renderCards(FORMS_OTHER, gridOther, FORMS_RECOMMENDED.length + 1);
 
 // ─── Search / Filter ───
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim().toLowerCase();
-  const cards = grid.querySelectorAll('.card');
-  let visible = 0;
+  let visibleRec = 0, visibleOther = 0;
 
-  cards.forEach(card => {
-    const title = (card.dataset.title || '').toLowerCase();
-    const desc = (card.dataset.desc || '').toLowerCase();
-    const match = !q || title.includes(q) || desc.includes(q);
+  gridRec.querySelectorAll('.card').forEach(card => {
+    const match = !q || (card.dataset.title || '').toLowerCase().includes(q)
+                     || (card.dataset.desc  || '').toLowerCase().includes(q);
     card.classList.toggle('hidden', !match);
-    if (match) visible++;
+    if (match) visibleRec++;
   });
 
-  emptyState.classList.toggle('visible', visible === 0);
-  categoryLabel.textContent = q
-    ? `תוצאות חיפוש (${visible})`
-    : 'טפסים זמינים';
+  gridOther.querySelectorAll('.card').forEach(card => {
+    const match = !q || (card.dataset.title || '').toLowerCase().includes(q)
+                     || (card.dataset.desc  || '').toLowerCase().includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) visibleOther++;
+  });
+
+  const total = visibleRec + visibleOther;
+
+  // Show/hide sections based on matches
+  sectionRec.style.display   = visibleRec   > 0 ? '' : 'none';
+  sectionOther.style.display = visibleOther > 0 ? '' : 'none';
+  divider.style.display      = (visibleRec > 0 && visibleOther > 0) ? '' : 'none';
+  emptyState.classList.toggle('visible', total === 0);
+
+  // Update labels during search
+  if (q) {
+    labelRec.textContent   = `טפסים מומלצים (${visibleRec})`;
+    labelOther.textContent = `טפסים אחרים (${visibleOther})`;
+  } else {
+    labelRec.textContent   = 'טפסים מומלצים';
+    labelOther.textContent = 'טפסים אחרים';
+  }
 });
 </script>
 </body>
